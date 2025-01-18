@@ -1,0 +1,60 @@
+services:
+
+    # WORDPRESS
+    wordpress:
+        image: wordpress:latest
+        container_name: wordpress
+        depends_on:
+            - db
+        restart: always
+        ports:
+            - 80:80
+        environment:
+               WORDPRESS_DB_HOST: db
+               WORDPRESS_DEBUG: "true"
+        volumes:
+            - wordpress:/var/www/html
+        networks:
+            - wordpress-network
+
+    # MARIADB DATABASE
+    db:
+        image: mariadb:latest
+        container_name: mariadb-wordpress
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 
+        volumes:
+            - db:/var/lib/mysql
+        networks:
+            - wordpress-network
+
+    # PHP MYADMIN
+    phpmyadmin:
+        image: phpmyadmin:latest
+        container_name: phpmyadmin
+        depends_on:
+            - db
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=db      
+            - PMA_USER=root
+            - PMA_PASSWORD=
+        networks:
+            - wordpress-network    
+
+volumes:
+    wordpress:
+        name: wordpress
+        driver: local
+    db:
+        name: mariadb-wordpress
+        driver: local
+
+networks:
+    wordpress-network:
+        name: wordpress-network
+        driver: bridge

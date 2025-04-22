@@ -1,0 +1,16 @@
+services:
+    sonarqube:
+        image: sonarqube:community
+        container_name: sonarqube
+        ports:
+            - "9000:9000"
+        volumes:
+            - sonarqube-data:/opt/sonarqube/data
+            - sonarqube-logs:/opt/sonarqube/logs
+
+# Docker Volumes
+volumes:
+    sonarqube-data:
+        name: sonarqube-data
+    sonarqube-logs:
+        name: sonarqube-logs

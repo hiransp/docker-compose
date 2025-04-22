@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mariadb:11.7.1-ubi9-rc
+    container_name: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=#d8F^5Xs64^RBPv#7B62
+
+volumes:
+  mariadb-data:
+    name: mariadb-data
+    driver: local

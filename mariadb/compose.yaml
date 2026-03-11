@@ -1,0 +1,35 @@
+services:
+  mariadb:
+    image: mariadb:12.2.2-ubi
+    container_name: mariadb-${PROJECT_NAME}
+    hostname: mariadb-${PROJECT_NAME}
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    networks:
+      - mariadb-network
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - mariadb-network
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb-${PROJECT_NAME}
+
+volumes:
+  mariadb-data:
+    name: mariadb-data
+    driver: local
+
+networks:
+  mariadb-network:
+    name: mariadb-network
+    driver: bridge
